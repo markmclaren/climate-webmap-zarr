@@ -74,6 +74,7 @@ const layer = new ZarrLayer({
   clim: TEMP_CLIM,
   selector: { month: 0 },
   zarrVersion: 3,
+  coordinateKeys: ['month'],
 })
 
 map.on('load', () => {
