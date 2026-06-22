@@ -66,7 +66,7 @@ map.on('data', (e) => {
 
 /* ── Zarr layer ── */
 
-const layer = new ZarrLayer({
+let layer = new ZarrLayer({
   id: 'climate',
   source: STORE_URL,
   variable: 'tavg',
@@ -150,18 +150,35 @@ function setVariable(variable) {
   btnTavg.classList.toggle('active', variable === 'tavg')
   btnPrec.classList.toggle('active', variable === 'prec')
 
-  if (variable === 'tavg') {
-    layer.setVariable('tavg')
-    layer.setColormap(TEMP_COLORMAP)
-    layer.setClim(TEMP_CLIM)
-    updateLegend(TEMP_COLORMAP, TEMP_CLIM, '°C')
-  } else {
-    layer.setVariable('prec')
-    layer.setColormap(PREC_COLORMAP)
-    layer.setClim(PREC_CLIM)
-    updateLegend(PREC_COLORMAP, PREC_CLIM, 'mm')
+  // Remove old layer to avoid buggy setVariable behavior in zarr-layer
+  if (map.getLayer('climate')) {
+    map.removeLayer('climate')
   }
-  updateLayer()
+
+  const colormap = variable === 'tavg' ? TEMP_COLORMAP : PREC_COLORMAP
+  const clim = variable === 'tavg' ? TEMP_CLIM : PREC_CLIM
+  const unit = variable === 'tavg' ? '°C' : 'mm'
+
+  updateLegend(colormap, clim, unit)
+
+  layer = new ZarrLayer({
+    id: 'climate',
+    source: STORE_URL,
+    variable: variable,
+    colormap: colormap,
+    clim: clim,
+    selector: { month: { selected: currentMonth, type: 'index' } },
+    zarrVersion: 3,
+    bounds: [-180, -90, 180, 90],
+    latIsAscending: false,
+  })
+
+  // Add the new layer before ocean mask layers if they exist to keep correct layering
+  if (map.getLayer('ocean-mask-fill')) {
+    map.addLayer(layer, 'ocean-mask-fill')
+  } else {
+    map.addLayer(layer)
+  }
 }
 
 btnTavg.addEventListener('click', () => setVariable('tavg'))
