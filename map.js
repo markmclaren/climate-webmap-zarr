@@ -69,11 +69,11 @@ map.on('data', (e) => {
 const layer = new ZarrLayer({
   id: 'climate',
   source: STORE_URL,
-  variable: 'climate',
+  variable: 'tavg',
   colormap: TEMP_COLORMAP,
   clim: TEMP_CLIM,
-  selector: { band: 0, month: 0 },
-  zarrVersion: 2,
+  selector: { month: 0 },
+  zarrVersion: 3,
 })
 
 map.on('load', () => {
@@ -105,7 +105,7 @@ map.on('load', () => {
 
 /* ── UI state & DOM refs ── */
 
-let currentBand = 0
+let currentVar = 'tavg'
 let currentMonth = 0
 
 const monthSlider = document.getElementById('month-slider')
@@ -137,22 +137,24 @@ let debounceTimer
 function updateLayer() {
   clearTimeout(debounceTimer)
   debounceTimer = setTimeout(() => {
-    layer.setSelector({ band: currentBand, month: currentMonth })
+    layer.setSelector({ month: currentMonth })
   }, 40)
 }
 
 /* ── Variable toggle ── */
 
-function setVariable(band) {
-  currentBand = band
-  btnTavg.classList.toggle('active', band === 0)
-  btnPrec.classList.toggle('active', band === 1)
+function setVariable(variable) {
+  currentVar = variable
+  btnTavg.classList.toggle('active', variable === 'tavg')
+  btnPrec.classList.toggle('active', variable === 'prec')
 
-  if (band === 0) {
+  if (variable === 'tavg') {
+    layer.setVariable('tavg')
     layer.setColormap(TEMP_COLORMAP)
     layer.setClim(TEMP_CLIM)
     updateLegend(TEMP_COLORMAP, TEMP_CLIM, '°C')
   } else {
+    layer.setVariable('prec')
     layer.setColormap(PREC_COLORMAP)
     layer.setClim(PREC_CLIM)
     updateLegend(PREC_COLORMAP, PREC_CLIM, 'mm')
@@ -160,8 +162,8 @@ function setVariable(band) {
   updateLayer()
 }
 
-btnTavg.addEventListener('click', () => setVariable(0))
-btnPrec.addEventListener('click', () => setVariable(1))
+btnTavg.addEventListener('click', () => setVariable('tavg'))
+btnPrec.addEventListener('click', () => setVariable('prec'))
 
 /* ── Month slider ── */
 
