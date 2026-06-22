@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Climate Data — tavg / precip Zarr Map</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://unpkg.com/maplibre-gl@5.24.0/dist/maplibre-gl.css" rel="stylesheet" />
+  <script src="https://unpkg.com/maplibre-gl@5.24.0/dist/maplibre-gl.js"></script>
+
+  <script type="importmap">
+  {
+    "imports": {
+      "@carbonplan/zarr-layer": "https://esm.sh/@carbonplan/zarr-layer@0.5.0",
+      "@carbonplan/colormaps": "https://esm.sh/@carbonplan/colormaps@4.0.0"
+    }
+  }
+  </script>
+
+  <link href="style.css" rel="stylesheet" />
+</head>
+<body>
+
+  <div id="map"></div>
+
+  <div class="panel" id="panel">
+    <button class="panel-toggle" aria-label="Toggle panel">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+    </button>
+
+    <a href="globe.html" class="nav-link">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+      Switch to 3D Map
+    </a>
+
+    <h1>Climate Data</h1>
+
+    <div>
+      <div class="control-label">Variable</div>
+      <div class="variable-toggle">
+        <button id="btn-tavg" class="active">Temperature</button>
+        <button id="btn-prec">Precipitation</button>
+      </div>
+    </div>
+
+    <div>
+      <div class="control-label">
+        <span>Month</span>
+        <span class="value" id="month-label" style="color: #fff; font-weight: 600;">January</span>
+      </div>
+      <input type="range" id="month-slider" min="0" max="11" value="0" step="1" />
+    </div>
+
+    <div id="legend">
+      <div id="legend-bar"></div>
+      <div id="legend-labels">
+        <span id="legend-min">—</span>
+        <span id="legend-max">—</span>
+      </div>
+    </div>
+
+    <div class="hint">
+      Uses @carbonplan/zarr-layer and @carbonplan/colormaps for full interactivity.
+    </div>
+
+  </div>
+
+  <script type="module" src="map.js"></script>
+
+</body>
+</html>

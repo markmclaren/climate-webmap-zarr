@@ -1,0 +1,206 @@
+html, body, #map {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  background: #020814;
+  color: #e2f1ff;
+  font-family: "Avenir Next", "Segoe UI", sans-serif;
+  overflow: hidden;
+}
+
+#map {
+  position: absolute;
+  inset: 0;
+}
+
+.panel {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  z-index: 20;
+  background: rgba(3, 17, 34, 0.78);
+  border: 1px solid rgba(166, 209, 250, 0.35);
+  border-radius: 10px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  backdrop-filter: blur(9px);
+  -webkit-backdrop-filter: blur(9px);
+  box-shadow: 0 8px 24px rgba(2, 7, 15, 0.45);
+  width: min(320px, calc(100vw - 28px));
+  box-sizing: border-box;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+}
+
+.panel.collapsed {
+  width: 52px;
+  height: 52px;
+  padding: 0;
+  border-radius: 12px;
+}
+
+.panel.collapsed > *:not(.panel-toggle) {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.panel-toggle {
+  position: absolute;
+  top: 7px;
+  right: 7px;
+  background: rgba(166, 209, 250, 0.1);
+  border: 1px solid rgba(166, 209, 250, 0.2);
+  border-radius: 8px;
+  color: #eef7ff;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  padding: 0;
+  z-index: 21;
+}
+
+.panel-toggle:hover {
+  background: rgba(166, 209, 250, 0.2);
+  border-color: rgba(166, 209, 250, 0.4);
+}
+
+.panel.collapsed .panel-toggle {
+  top: 10px;
+  right: 10px;
+}
+
+.panel.collapsed .panel-toggle svg {
+  transform: rotate(180deg);
+}
+
+.panel h1 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+  color: #bfe2ff;
+  padding-right: 32px;
+}
+
+.control-label {
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #b7d9fb;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.variable-toggle {
+  display: flex;
+  gap: 4px;
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 8px;
+  padding: 3px;
+}
+
+.variable-toggle button {
+  flex: 1;
+  padding: 7px 10px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: #8899aa;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.variable-toggle button.active {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+.variable-toggle button:hover:not(.active) {
+  color: #aabbcc;
+}
+
+input[type="range"] {
+  width: 100%;
+  height: 4px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.15);
+  outline: none;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+  accent-color: #7bc5ff;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #6b8cff;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  cursor: pointer;
+}
+
+input[type="range"]::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #6b8cff;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  cursor: pointer;
+}
+
+#legend {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+#legend-bar {
+  width: 100%;
+  height: 10px;
+  border-radius: 4px;
+}
+
+#legend-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  color: #9090a0;
+  font-variant-numeric: tabular-nums;
+}
+
+.hint {
+  font-size: 10px;
+  line-height: 1.4;
+  color: #c4dbf2;
+  opacity: 0.7;
+  margin-top: 4px;
+}
+
+.nav-link {
+  display: inline-flex;
+  align-items: center;
+  color: #7bc5ff;
+  text-decoration: none;
+  font-size: 12px;
+  font-weight: 600;
+  margin-top: 4px;
+  transition: color 0.2s;
+}
+
+.nav-link:hover {
+  color: #bfe2ff;
+}
+
+.nav-link svg {
+  margin-right: 6px;
+}
