@@ -72,9 +72,10 @@ const layer = new ZarrLayer({
   variable: 'tavg',
   colormap: TEMP_COLORMAP,
   clim: TEMP_CLIM,
-  selector: { month: 0 },
+  selector: { month: { selected: 0, type: 'index' } },
   zarrVersion: 3,
-  coordinateKeys: ['month'],
+  bounds: [-180, -90, 180, 90],
+  latIsAscending: false,
 })
 
 map.on('load', () => {
@@ -138,7 +139,7 @@ let debounceTimer
 function updateLayer() {
   clearTimeout(debounceTimer)
   debounceTimer = setTimeout(() => {
-    layer.setSelector({ month: currentMonth })
+    layer.setSelector({ month: { selected: currentMonth, type: 'index' } })
   }, 40)
 }
 
