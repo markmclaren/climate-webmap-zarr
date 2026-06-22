@@ -17,7 +17,7 @@ const MONTH_NAMES = [
 ]
 
 const STORE_URL =
-  'https://huggingface.co/datasets/markmclaren/climate-webmap-zarr/resolve/main/tavg-prec-month'
+  'https://huggingface.co/datasets/markmclaren/climate-webmap-zarr/resolve/main/tavg-prec-month-topozarr.zarr'
 
 /* ── Map ── */
 
