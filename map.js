@@ -66,8 +66,8 @@ map.on('data', (e) => {
 
 /* ── Zarr layer ── */
 
-let layer = new ZarrLayer({
-  id: 'climate',
+const tavgLayer = new ZarrLayer({
+  id: 'climate-tavg',
   source: STORE_URL,
   variable: 'tavg',
   colormap: TEMP_COLORMAP,
@@ -78,8 +78,25 @@ let layer = new ZarrLayer({
   latIsAscending: false,
 })
 
+const precLayer = new ZarrLayer({
+  id: 'climate-prec',
+  source: STORE_URL,
+  variable: 'prec',
+  colormap: PREC_COLORMAP,
+  clim: PREC_CLIM,
+  selector: { month: { selected: 0, type: 'index' } },
+  zarrVersion: 3,
+  bounds: [-180, -90, 180, 90],
+  latIsAscending: false,
+})
+
 map.on('load', () => {
-  map.addLayer(layer)
+  map.addLayer(tavgLayer)
+  map.addLayer(precLayer)
+
+  // Initially show temperature, hide precipitation
+  map.setLayoutProperty('climate-prec', 'visibility', 'none')
+  map.setLayoutProperty('climate-tavg', 'visibility', 'visible')
 
   map.addLayer({
     id: 'ocean-mask-fill',
@@ -139,8 +156,9 @@ let debounceTimer
 function updateLayer() {
   clearTimeout(debounceTimer)
   debounceTimer = setTimeout(() => {
-    layer.setSelector({ month: { selected: currentMonth, type: 'index' } })
-  }, 40)
+    const activeLayer = currentVar === 'tavg' ? tavgLayer : precLayer
+    activeLayer.setSelector({ month: { selected: currentMonth, type: 'index' } })
+  }, 100)
 }
 
 /* ── Variable toggle ── */
@@ -150,35 +168,17 @@ function setVariable(variable) {
   btnTavg.classList.toggle('active', variable === 'tavg')
   btnPrec.classList.toggle('active', variable === 'prec')
 
-  // Remove old layer to avoid buggy setVariable behavior in zarr-layer
-  if (map.getLayer('climate')) {
-    map.removeLayer('climate')
-  }
-
   const colormap = variable === 'tavg' ? TEMP_COLORMAP : PREC_COLORMAP
   const clim = variable === 'tavg' ? TEMP_CLIM : PREC_CLIM
   const unit = variable === 'tavg' ? '°C' : 'mm'
 
   updateLegend(colormap, clim, unit)
 
-  layer = new ZarrLayer({
-    id: 'climate',
-    source: STORE_URL,
-    variable: variable,
-    colormap: colormap,
-    clim: clim,
-    selector: { month: { selected: currentMonth, type: 'index' } },
-    zarrVersion: 3,
-    bounds: [-180, -90, 180, 90],
-    latIsAscending: false,
-  })
+  const activeLayer = variable === 'tavg' ? tavgLayer : precLayer
+  activeLayer.setSelector({ month: { selected: currentMonth, type: 'index' } })
 
-  // Add the new layer before ocean mask layers if they exist to keep correct layering
-  if (map.getLayer('ocean-mask-fill')) {
-    map.addLayer(layer, 'ocean-mask-fill')
-  } else {
-    map.addLayer(layer)
-  }
+  map.setLayoutProperty('climate-tavg', 'visibility', variable === 'tavg' ? 'visible' : 'none')
+  map.setLayoutProperty('climate-prec', 'visibility', variable === 'prec' ? 'visible' : 'none')
 }
 
 btnTavg.addEventListener('click', () => setVariable('tavg'))
