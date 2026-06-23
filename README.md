@@ -18,7 +18,7 @@ It recreates and adapts parts of:
 - **Base Map**: Dark tiles from [OpenFreeMap](https://openfreemap.org/)
 
 ## Data Source
-The application streams Zarr multiscale data directly from HuggingFace without a backend database:
+The application streams Zarr multiscale data directly from HuggingFace without a backend database, derived from [WorldClim v2.1](https://www.worldclim.org/data/worldclim21.html):
 - **HuggingFace Dataset**: [markmclaren/climate-webmap-zarr](https://huggingface.co/datasets/markmclaren/climate-webmap-zarr)
 
 ## Structure
