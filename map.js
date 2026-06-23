@@ -17,7 +17,7 @@ const MONTH_NAMES = [
 ]
 
 const STORE_URL =
-  'https://huggingface.co/datasets/markmclaren/climate-webmap-zarr/resolve/main/tavg-prec-month-topozarr.zarr'
+  'https://huggingface.co/datasets/markmclaren/climate-webmap-zarr/resolve/main/tavg-prec-month-topozarr-30s.zarr'
 
 /* ── Map ── */
 
@@ -27,8 +27,8 @@ const mapOptions = {
   center: [0, 30],
   zoom: isGlobe ? 2.5 : 2,
   minZoom: isGlobe ? 0 : 2,
-  maxZoom: 5,
-  attributionControl: !isGlobe,
+  maxZoom: 9,
+  attributionControl: false,
 }
 
 if (!isGlobe) {
@@ -111,12 +111,12 @@ let currentVar = 'tavg'
 let currentMonth = 0
 
 const monthSlider = document.getElementById('month-slider')
-const monthLabel  = document.getElementById('month-label')
-const btnTavg     = document.getElementById('btn-tavg')
-const btnPrec     = document.getElementById('btn-prec')
-const legendBar   = document.getElementById('legend-bar')
-const legendMin   = document.getElementById('legend-min')
-const legendMax   = document.getElementById('legend-max')
+const monthLabel = document.getElementById('month-label')
+const btnTavg = document.getElementById('btn-tavg')
+const btnPrec = document.getElementById('btn-prec')
+const legendBar = document.getElementById('legend-bar')
+const legendMin = document.getElementById('legend-min')
+const legendMax = document.getElementById('legend-max')
 const panel = document.getElementById('panel')
 const panelToggle = document.querySelector('.panel-toggle')
 
